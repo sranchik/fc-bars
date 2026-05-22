@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Команда – ФК Барс (Каракол)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .admin-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        .team-filter {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .filter-btn {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .filter-btn.active {
+            background: #1e3a5f;
+            color: white;
+            border-color: #1e3a5f;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 45px;
+        }
+        .player-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #eee;
+            transition: 0.2s;
+        }
+        .player-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        .player-image {
+            height: 280px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #f5f5f5;
+            position: relative;
+        }
+        .player-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: gold;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .player-info {
+            padding: 20px;
+            text-align: center;
+        }
+        .player-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .player-position {
+            color: #1e3a5f;
+            font-weight: 500;
+            margin: 5px 0;
+        }
+        .player-short-info {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .error-message {
+            text-align: center;
+            padding: 50px;
+            color: #dc3545;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="admin/login.html" class="admin-button" target="_blank">
+        <i class="fas fa-sign-in-alt"></i> Войти
+    </a>
+
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon"><i class="fas fa-futbol"></i></span>
+                    <span class="logo-text">ФК БАРС</span>
+                    <span class="logo-subtitle">футбольный клуб • каракол</span>
+                </a>
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Главная</a></li>
+                    <li><a href="club.html" class="nav-link">О клубе</a></li>
+                    <li><a href="team.html" class="nav-link active">Команда</a></li>
+                    <li><a href="matches.html" class="nav-link">Матчи</a></li>
+                    <li><a href="news.html" class="nav-link">Новости</a></li>
+                    <li><a href="contact.html" class="nav-link">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="breadcrumb-section">
+            <div class="container">
+                <nav class="breadcrumb">
+                    <a href="index.html">Главная</a>
+                    <span><i class="fas fa-chevron-right"></i></span>
+                    <span class="current">Команда</span>
+                </nav>
+                <h1 class="page-title">Состав команды</h1>
+                <p class="page-subtitle">Игроки ФК «Барс» в сезоне 2026 года</p>
+            </div>
+        </section>
+
+        <section class="section team-section">
+            <div class="container">
+                <div class="team-filter">
+                    <button class="filter-btn active" data-filter="all">Все</button>
+                    <button class="filter-btn" data-filter="Вратарь">Вратари</button>
+                    <button class="filter-btn" data-filter="Защитник">Защитники</button>
+                    <button class="filter-btn" data-filter="Полузащитник">Полузащитники</button>
+                    <button class="filter-btn" data-filter="Нападающий">Нападающие</button>
+                </div>
+                <div class="team-grid" id="teamGrid">
+                    <div class="error-message">⏳ Загрузка игроков...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html" class="logo">
+                        <span class="logo-icon"><i class="fas fa-futbol"></i></span>
+                        <span class="logo-text">ФК БАРС</span>
+                    </a>
+                    <p>Футбольный клуб «Барс» – честь, борьба, победа.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/barsissykkul" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://t.me/barsissykkul" target="_blank"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-contact">
+                    <h3>Контакты</h3>
+                    <p>г. Каракол, ул. Нагимы Айтматовой<br>Стадион «Ынтымак Арена»</p>
+                    <p><i class="fas fa-phone"></i> +996 (3922) 5-11-22</p>
+                    <p><i class="fas fa-envelope"></i> info@fcbars.kg</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Футбольный клуб «Барс» (Каракол). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+       const API_URL = 'https://8888888.pythonanywhere.com/api';
+
+        async function loadPlayers() {
+            const grid = document.getElementById('teamGrid');
+            try {
+                const response = await fetch(`${API_URL}/players`);
+                if (!response.ok) throw new Error('Сервер не отвечает');
+                const players = await response.json();
+                
+                if (players.length === 0) {
+                    grid.innerHTML = '<div class="error-message">⚠️ Нет игроков. Добавьте их через админ-панель.</div>';
+                    return;
+                }
+                
+                grid.innerHTML = players.map(p => `
+                    <div class="player-card" data-position="${p.position}">
+                        <div class="player-image" style="background-image: url('${p.photo_url || ''}');">
+                            <div class="player-number">${p.number}</div>
+                        </div>
+                        <div class="player-info">
+                            <div class="player-name">${p.name}</div>
+                            <div class="player-position">${p.position}</div>
+                            <div class="player-short-info">
+                                <span>${p.age || '—'} лет</span>
+                                <span>${p.nationality || 'Кыргызстан'}</span>
+                                <span>⚽ ${p.goals || 0}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                initFilters();
+            } catch (error) {
+                grid.innerHTML = '<div class="error-message">❌ Ошибка подключения к серверу. Запустите сервер: python app.py</div>';
+            }
+        }
+        
+        function initFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const getCards = () => document.querySelectorAll('.player-card');
+            
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const filter = btn.dataset.filter;
+                    getCards().forEach(card => {
+                        if (filter === 'all' || card.dataset.position === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+        
+        loadPlayers();
+    </script>
+</body>
+</html>

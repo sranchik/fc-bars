@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в админ-панель | ФК Барс</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .admin-login-page {
+            background: linear-gradient(135deg, #1e2a3a 0%, #C49A6C 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+        .admin-login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .btn-primary {
+            background: #C49A6C;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            background: #A57C52;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+<body class="admin-login-page">
+    <div class="admin-login-container">
+        <div class="admin-login-box">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <i class="fas fa-futbol" style="font-size: 3rem; color: #C49A6C;"></i>
+                <h1 style="font-family: 'Montserrat', serif; margin-top: 10px;">ФК Барс</h1>
+                <p style="color: #666;">Вход в панель управления</p>
+            </div>
+            
+            <form id="loginForm">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Логин</label>
+                    <input type="text" id="username" value="admin">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Пароль</label>
+                    <input type="password" id="password" value="admin123">
+                </div>
+                
+                <button type="submit" class="btn-primary">Войти</button>
+                
+                <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                    
+                    <a href="../index.html" style="color: #C49A6C;">← На главную</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'admin' && password === 'admin123') {
+                sessionStorage.setItem('admin_logged_in', 'true');
+                window.location.href = 'index.html';
+            } else {
+                alert('Неверный логин или пароль');
+            }
+        });
+    </script>
+</body>
+</html>

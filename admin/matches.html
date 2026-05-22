@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление матчами | Админ-панель ФК Барс</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background: #f0f2f5; }
+        .admin-container { max-width: 1300px; margin: 30px auto; padding: 0 20px; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        h1 { color: #1e3a5f; }
+        .btn { padding: 10px 24px; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 14px; }
+        .btn-primary { background: #1e3a5f; color: white; }
+        .btn-primary:hover { background: #0f2b4a; }
+        .btn-delete { background: #dc3545; color: white; padding: 6px 16px; font-size: 12px; }
+        .btn-edit { background: #ffc107; color: #1e1e2a; padding: 6px 16px; font-size: 12px; margin-right: 5px; border: none; border-radius: 8px; cursor: pointer; }
+        .nav-links { margin-bottom: 20px; }
+        .nav-links a { margin-right: 20px; color: #1e3a5f; text-decoration: none; }
+        table { width: 100%; background: white; border-radius: 20px; overflow: hidden; border-collapse: collapse; }
+        th { background: #1e3a5f; color: white; padding: 15px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 30px; border-radius: 24px; width: 90%; max-width: 550px; }
+        .modal-content h2 { margin-bottom: 20px; color: #1e3a5f; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 12px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+        .status-upcoming { background: #e3f2fd; color: #1e3a5f; }
+        .status-finished { background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="nav-links">
+            <a href="index.html">🏠 Главная</a>
+            <a href="players.html">⚽ Игроки</a>
+            <a href="news.html">📰 Новости</a>
+            <a href="matches.html" style="font-weight: bold;">📅 Матчи</a>
+            <a href="messages.html">✉️ Сообщения</a>
+            <a href="#" id="logoutLink">🚪 Выход</a>
+        </div>
+
+        <div class="admin-header">
+            <h1>📅 Управление матчами</h1>
+            <button class="btn btn-primary" onclick="openAddModal()">➕ Добавить матч</button>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table id="matchesTable">
+                <thead>
+                    <tr><th>Дата</th><th>Соперник</th><th>Место</th><th>Счёт</th><th>Статус</th><th>Действия</th></tr>
+                </thead>
+                <tbody id="matchesTableBody">
+                    <tr><td colspan="6" style="text-align:center;">Загрузка...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="matchModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">➕ Добавить матч</h2>
+            <div class="form-group"><label>Дата *</label><input type="date" id="date" required></div>
+            <div class="form-row">
+                <div class="form-group"><label>Счёт (БАРС)</label><input type="number" id="score_home" value="0"></div>
+                <div class="form-group"><label>Счёт (Соперник)</label><input type="number" id="score_away" value="0"></div>
+            </div>
+            <div class="form-group"><label>Соперник *</label><input type="text" id="opponent" placeholder="Например: Дордой" required></div>
+            <div class="form-group"><label>Место</label><input type="text" id="location" placeholder="Ынтымак Арена, Каракол"></div>
+            <div class="form-group"><label>Статус</label>
+                <select id="status">
+                    <option value="upcoming">Предстоит</option>
+                    <option value="finished">Завершён</option>
+                </select>
+            </div>
+            <input type="hidden" id="editId" value="">
+            <div class="form-buttons">
+                <button class="btn" style="background:#ccc" onclick="closeModal()">Отмена</button>
+                <button class="btn btn-primary" onclick="saveMatch()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://8888888.pythonanywhere.com/api';
+
+        // Проверка авторизации
+        if (!sessionStorage.getItem('admin_logged_in')) {
+            window.location.href = 'login.html';
+        }
+
+        // Выход
+        document.getElementById('logoutLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.removeItem('admin_logged_in');
+            window.location.href = 'login.html';
+        });
+
+        // Загрузка матчей
+        async function loadMatches() {
+            try {
+                const response = await fetch(`${API_URL}/matches`);
+                const matches = await response.json();
+                const tbody = document.getElementById('matchesTableBody');
+                
+                if (!matches.length) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Нет матчей. Добавьте первый!</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = matches.map(m => `
+                    <tr>
+                        <td>${m.date || '—'}</td>
+                        <td><strong>${escapeHtml(m.opponent)}</strong></td>
+                        <td>${escapeHtml(m.location) || '—'}</td>
+                        <td>${m.score_home !== undefined ? `${m.score_home}:${m.score_away}` : '—'}</td>
+                        <td><span class="status-badge ${m.status === 'upcoming' ? 'status-upcoming' : 'status-finished'}">${m.status === 'upcoming' ? '📅 Предстоит' : '✅ Завершён'}</span></td>
+                        <td>
+                            <button class="btn-edit" onclick="editMatch(${m.id})">✏️</button>
+                            <button class="btn-delete" onclick="deleteMatch(${m.id})">🗑️</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error(error);
+                document.getElementById('matchesTableBody').innerHTML = '<td><td colspan="6" style="text-align:center;color:red;">❌ Ошибка подключения к серверу</td></td>';
+            }
+        }
+
+        // Сохранение матча
+        async function saveMatch() {
+            const match = {
+                date: document.getElementById('date').value,
+                opponent: document.getElementById('opponent').value.trim(),
+                location: document.getElementById('location').value,
+                score_home: parseInt(document.getElementById('score_home').value) || 0,
+                score_away: parseInt(document.getElementById('score_away').value) || 0,
+                status: document.getElementById('status').value
+            };
+            
+            if (!match.date || !match.opponent) {
+                alert('Заполните дату и соперника!');
+                return;
+            }
+            
+            const editId = document.getElementById('editId').value;
+            const url = editId ? `${API_URL}/matches/${editId}` : `${API_URL}/matches`;
+            const method = editId ? 'PUT' : 'POST';
+            
+            try {
+                await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(match)
+                });
+                closeModal();
+                loadMatches();
+                alert(editId ? '✅ Матч обновлён!' : '✅ Матч добавлен!');
+            } catch (error) {
+                alert('❌ Ошибка сохранения');
+            }
+        }
+        
+        // Редактирование матча
+        async function editMatch(id) {
+            try {
+                const response = await fetch(`${API_URL}/matches`);
+                const matches = await response.json();
+                const m = matches.find(x => x.id === id);
+                if (!m) return;
+                
+                document.getElementById('editId').value = m.id;
+                document.getElementById('date').value = m.date || '';
+                document.getElementById('opponent').value = m.opponent || '';
+                document.getElementById('location').value = m.location || '';
+                document.getElementById('score_home').value = m.score_home || 0;
+                document.getElementById('score_away').value = m.score_away || 0;
+                document.getElementById('status').value = m.status || 'upcoming';
+                document.getElementById('modalTitle').innerText = '✏️ Редактировать матч';
+                document.getElementById('matchModal').style.display = 'flex';
+            } catch (error) {
+                alert('Ошибка загрузки матча');
+            }
+        }
+
+        // Удаление матча
+        async function deleteMatch(id) {
+            if (!confirm('Удалить матч?')) return;
+            try {
+                await fetch(`${API_URL}/matches/${id}`, { method: 'DELETE' });
+                loadMatches();
+                alert('✅ Матч удалён');
+            } catch (error) {
+                alert('❌ Ошибка удаления');
+            }
+        }
+        
+        function openAddModal() {
+            document.getElementById('matchForm')?.reset();
+            document.getElementById('editId').value = '';
+            document.getElementById('date').value = '';
+            document.getElementById('opponent').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('score_home').value = '0';
+            document.getElementById('score_away').value = '0';
+            document.getElementById('status').value = 'upcoming';
+            document.getElementById('modalTitle').innerText = '➕ Добавить матч';
+            document.getElementById('matchModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('matchModal').style.display = 'none';
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        loadMatches();
+    </script>
+</body>
+</html>

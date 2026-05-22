@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О клубе | ФК Барс – Каракол</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        /* Стили для кнопки админ-панели (СИНЯЯ, ВВЕРХУ СПРАВА) */
+        .admin-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10000;
+            box-shadow: 0 2px 10px rgba(0,123,255,0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .admin-button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,123,255,0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Кнопка Админ-панели -->
+   <a href="admin/login.html" class="admin-button" target="_blank">
+    <i class="fas fa-sign-in-alt"></i> Войти
+   </a>
+
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon"><i class="fas fa-futbol"></i></span>
+                    <span class="logo-text">ФК БАРС</span>
+                    <span class="logo-subtitle">футбольный клуб • каракол</span>
+                </a>
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <ul class="nav-menu" id="navMenu">
+                        <li><a href="index.html" class="nav-link">Главная</a></li>
+                        <li><a href="club.html" class="nav-link">О клубе</a></li>
+                        <li><a href="team.html" class="nav-link">Команда</a></li>
+                        <li><a href="matches.html" class="nav-link">Матчи</a></li>
+                        <li><a href="news.html" class="nav-link">Новости</a></li>
+                        <li><a href="contact.html" class="nav-link">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="breadcrumb-section">
+            <div class="container">
+                <nav class="breadcrumb">
+                    <a href="index.html">Главная</a>
+                    <span><i class="fas fa-chevron-right"></i></span>
+                    <span class="current">О клубе</span>
+                </nav>
+                <h1 class="page-title">О футбольном клубе «Барс»</h1>
+                <p class="page-subtitle">История, достижения, философия и развитие клуба</p>
+            </div>
+        </section>
+
+        <section class="section history-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Наша история</h2>
+                    <p class="section-subtitle">От основания до сегодняшних побед</p>
+                </div>
+                <div class="welcome-content">
+                    <div class="welcome-text">
+                        <p><strong>Футбольный клуб «Барс»</strong> был основан в <strong>1985 году</strong> в городе Каракол группой энтузиастов при поддержке городского совета. С первых дней своего существования команда стала центром притяжения для любителей футбола всего Иссык-Кульского региона.</p>
+                        <p>В 1990-е годы клуб пережил сложный период, но благодаря поддержке местных властей и преданности болельщиков сумел сохранить традиции и продолжить развитие. Именно в эти годы сформировался костяк команды, который позже привел клуб к первым серьезным успехам.</p>
+                        <p><strong>Золотая эра «Барса»</strong> началась в 2010-х годах. Команда трижды становилась чемпионом Иссык-Кульской области, а в 2018 году завоевала свой первый Кубок региона. В 2020 и 2022 годах клуб подтвердил статус сильнейшего, добавив в коллекцию еще два трофея.</p>
+                        <p>В <strong>2024 году</strong> клуб завоевал серебряные медали чемпионата Иссык-Кульской области, уступив только в финале. Это стало стимулом для дальнейшего развития и укрепления состава.</p>
+                        <p>Сегодня «Барс» – это не просто футбольная команда, а целая футбольная семья. Мы гордимся нашей историей и с оптимизмом смотрим в будущее, ставя перед собой амбициозные задачи и стремясь к новым высотам.</p>
+                        <div class="welcome-buttons" style="margin-top: 25px;">
+                            <a href="team.html" class="btn btn-primary">Состав команды</a>
+                            <a href="matches.html" class="btn btn-outline">Календарь матчей</a>
+                        </div>
+                    </div>
+                    <div class="welcome-image">
+                        <div class="image-frame">
+                            <div class="club-image" style="background-image: url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'); height: 400px; background-size: cover; background-position: center;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section achievements-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Наши достижения</h2>
+                    <p class="section-subtitle">Трофеи и награды клуба</p>
+                </div>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-trophy"></i></div>
+                        <h3>5× Чемпионы области</h3>
+                        <p>2015, 2018, 2020, 2022, 2024 — золотые медали чемпионата Иссык-Кульской области</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-medal"></i></div>
+                        <h3>3× Кубок области</h3>
+                        <p>2017, 2019, 2023 — обладатели Кубка Иссык-Кульской области</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-futbol"></i></div>
+                        <h3>Лучшая академия</h3>
+                        <p>Приз за развитие молодёжного футбола в 2021 году</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-users"></i></div>
+                        <h3>Самые преданные болельщики</h3>
+                        <p>Приз зрительских симпатий 2022-2024</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section philosophy-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Наша философия</h2>
+                    <p class="section-subtitle">Ценности и принципы клуба</p>
+                </div>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-heart"></i></div>
+                        <h3>Страсть</h3>
+                        <p>Мы играем с душой и сердцем, вкладывая все силы в каждую минуту на поле. Футбол для нас — это образ жизни.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-handshake"></i></div>
+                        <h3>Единство</h3>
+                        <p>Мы одна команда – игроки, тренеры и болельщики. Вместе мы сила, и только вместе мы можем достичь вершин.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3>Развитие</h3>
+                        <p>Мы постоянно растем и стремимся к новым вершинам, не останавливаясь на достигнутом. Каждый сезон — новый вызов.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>Честность</h3>
+                        <p>Fair play и уважение к сопернику — основа нашего клуба. Мы за честную и красивую игру.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section stadium-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Стадион «Ынтымак Арена»</h2>
+                    <p class="section-subtitle">Наша домашняя арена</p>
+                </div>
+                <div class="welcome-content">
+                    <div class="welcome-text">
+                        <p><strong>«Ынтымак Арена»</strong> — домашняя арена ФК «Барс» в городе Каракол. Вместимость стадиона составляет <strong>5000 зрителей</strong>. За годы существования арена стала настоящим храмом футбола для местных болельщиков.</p>
+                        <p>В <strong>2023 году</strong> стадион был модернизирован: установлено современное освещение, заменено покрытие поля, обновлены раздевалки и трибуны. Теперь «Ынтымак Арена» соответствует самым высоким стандартам.</p>
+                        <p>На стадионе регулярно проходят не только матчи чемпионата, но и турниры детско-юношеских команд, а также товарищеские встречи с клубами из соседних регионов.</p>
+                        <p><strong>📍 Адрес:</strong> г. Каракол, ул. Нагимы Айтматовой, стадион «Ынтымак Арена»</p>
+                        <div class="welcome-buttons" style="margin-top: 25px;">
+                            <a href="contact.html" class="btn btn-primary">Как добраться</a>
+                            <a href="matches.html" class="btn btn-outline">Расписание матчей</a>
+                        </div>
+                    </div>
+                    <div class="welcome-image">
+                        <div class="image-frame">
+                            <div class="club-image" style="background-image: url('https://images.unsplash.com/photo-1459865264687-595d652de67e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'); height: 400px; background-size: cover; background-position: center;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Стань частью истории!</h2>
+                    <p>Приходи на стадион, поддержи команду в новом сезоне 2026!</p>
+                    <div class="cta-buttons">
+                        <a href="contact.html" class="btn btn-outline" style="border-color: white; color: white;">Связаться с нами</a>
+                        <a href="matches.html" class="btn btn-primary" style="background: var(--secondary-color); color: var(--dark-color);">Календарь матчей</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html" class="logo">
+                        <span class="logo-icon"><i class="fas fa-futbol"></i></span>
+                        <span class="logo-text">ФК БАРС</span>
+                    </a>
+                    <p>Футбольный клуб «Барс» – честь, борьба, победа.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/barsissykkul?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://t.me/barsissykkul" target="_blank"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-contact">
+                    <h3>Контакты</h3>
+                    <p>г. Каракол, ул. Нагимы Айтматовой<br>Стадион «Ынтымак Арена»</p>
+                    <p><i class="fas fa-phone"></i> +996 (3922) 5-11-22</p>
+                    <p><i class="fas fa-envelope"></i> info@fcbars.kg</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Футбольный клуб «Барс» (Каракол). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

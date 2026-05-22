@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дашборд | Админ-панель ФК Барс</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-body">
+        <div class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <h2><i class="fas fa-futbol"></i> ФК БАРС</h2>
+            </div>
+            <div class="admin-sidebar-menu">
+                <a href="index.html" class="admin-menu-item">
+                    <i class="fas fa-home"></i> Главная
+                </a>
+                <a href="dashboard.html" class="admin-menu-item active">
+                    <i class="fas fa-tachometer-alt"></i> Дашборд
+                </a>
+                <a href="players.html" class="admin-menu-item">
+                    <i class="fas fa-users"></i> Игроки
+                </a>
+                <a href="news.html" class="admin-menu-item">
+                    <i class="fas fa-newspaper"></i> Новости
+                </a>
+                <a href="matches.html" class="admin-menu-item">
+                    <i class="fas fa-calendar-alt"></i> Матчи
+                </a>
+                <a href="messages.html" class="admin-menu-item">
+                    <i class="fas fa-envelope"></i> Сообщения
+                </a>
+                <a href="#" class="admin-menu-item" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Выход
+                </a>
+            </div>
+        </div>
+        
+        <div class="admin-main">
+            <div class="admin-header">
+                <h1>Дашборд</h1>
+                <div class="admin-user">
+                    <span>Администратор</span>
+                    <div class="admin-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-icon primary">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalPlayers">0</h3>
+                        <p>Игроков</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon success">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalNews">0</h3>
+                        <p>Новостей</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon warning">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="upcomingMatches">0</h3>
+                        <p>Предстоящих матчей</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon info">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="newMessages">0</h3>
+                        <p>Новых сообщений</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-table-container">
+                <h2 style="margin-bottom: 20px;">Последние новости</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Заголовок</th>
+                            <th>Дата</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentNewsTable">
+                        <tr><td colspan="4" style="text-align: center;">Загрузка...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="admin-table-container">
+                <h2 style="margin-bottom: 20px;">Ближайшие матчи</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Соперник</th>
+                            <th>Место</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody id="upcomingMatchesTable">
+                        <tr><td colspan="4" style="text-align: center;">Загрузка...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!sessionStorage.getItem('admin_logged_in')) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Загрузка статистики
+            const players = JSON.parse(localStorage.getItem('fcbars_players') || '[]');
+            const news = JSON.parse(localStorage.getItem('fcbars_news') || '[]');
+            const matches = JSON.parse(localStorage.getItem('fcbars_matches') || '[]');
+            const messages = JSON.parse(localStorage.getItem('fcbars_messages') || '[]');
+            
+            document.getElementById('totalPlayers').textContent = players.length;
+            document.getElementById('totalNews').textContent = news.length;
+            document.getElementById('newMessages').textContent = messages.filter(m => m.status === 'new').length;
+            
+            const upcoming = matches.filter(m => m.status === 'upcoming' || !m.result);
+            document.getElementById('upcomingMatches').textContent = upcoming.length;
+            
+            // Последние новости
+            const recentNews = news.slice(-3).reverse();
+            const newsTable = document.getElementById('recentNewsTable');
+            if (recentNews.length === 0) {
+                newsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">Нет новостей</td></tr>';
+            } else {
+                let html = '';
+                recentNews.forEach((item, idx) => {
+                    html += `<tr>
+                        <td>${idx + 1}</td>
+                        <td>${item.title || 'Без заголовка'}</td>
+                        <td>${item.date || ''}</td>
+                        <td><button class="admin-btn admin-btn-view" onclick="window.location.href='news.html'">Редактировать</button></td>
+                    </tr>`;
+                });
+                newsTable.innerHTML = html;
+            }
+            
+            // Ближайшие матчи
+            const matchesTable = document.getElementById('upcomingMatchesTable');
+            const upcomingMatches = matches.filter(m => m.status === 'upcoming' || !m.result).slice(0, 5);
+            if (upcomingMatches.length === 0) {
+                matchesTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">Нет предстоящих матчей</td></tr>';
+            } else {
+                let html = '';
+                upcomingMatches.forEach(match => {
+                    html += `<tr>
+                        <td>${match.date || ''}</td>
+                        <td>${match.opponent || 'Соперник'}</td>
+                        <td>${match.location === 'home' ? 'Дома' : (match.location === 'away' ? 'В гостях' : match.location)}</td>
+                        <td><span class="status-badge status-pending">Предстоит</span></td>
+                    </tr>`;
+                });
+                matchesTable.innerHTML = html;
+            }
+        });
+        
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            sessionStorage.removeItem('admin_logged_in');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

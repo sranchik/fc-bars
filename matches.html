@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Матчи – ФК Барс (Каракол)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Стили для кнопки админ-панели (СИНЯЯ, ВВЕРХУ СПРАВА) */
+        .admin-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10000;
+            box-shadow: 0 2px 10px rgba(0,123,255,0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .admin-button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,123,255,0.4);
+        }
+        /* Дополнительные стили для страницы матчей */
+        .matches-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto 50px;
+        }
+        .match-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 25px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .match-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-hover);
+        }
+        .match-info {
+            flex: 2;
+        }
+        .match-date {
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        .match-teams {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        .match-location {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+        .match-result {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            background: #f5f5f5;
+            padding: 8px 20px;
+            border-radius: 40px;
+            min-width: 100px;
+            text-align: center;
+        }
+        .match-result.upcoming {
+            background: #e3f2fd;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+        .standings-table {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+        .standings-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .standings-table th {
+            background: #f8f9fa;
+            color: var(--dark-color);
+            padding: 15px 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .standings-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: center;
+        }
+        .standings-table .highlight {
+            background-color: rgba(0, 71, 171, 0.05);
+            font-weight: 600;
+            border-left: 3px solid var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Кнопка Админ-панели -->
+   <a href="admin/login.html" class="admin-button" target="_blank">
+    <i class="fas fa-sign-in-alt"></i> Войти
+   </a>
+
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon"><i class="fas fa-futbol"></i></span>
+                    <span class="logo-text">ФК БАРС</span>
+                    <span class="logo-subtitle">футбольный клуб • каракол</span>
+                </a>
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <ul class="nav-menu" id="navMenu">
+                   <li><a href="index.html" class="nav-link">Главная</a></li>
+                   <li><a href="club.html" class="nav-link">О клубе</a></li>
+                   <li><a href="team.html" class="nav-link">Команда</a></li>
+                   <li><a href="matches.html" class="nav-link">Матчи</a></li>
+                   <li><a href="news.html" class="nav-link">Новости</a></li>
+                   <li><a href="contact.html" class="nav-link">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="breadcrumb-section">
+            <div class="container">
+                <nav class="breadcrumb">
+                    <a href="index.html">Главная</a>
+                    <span><i class="fas fa-chevron-right"></i></span>
+                    <span class="current">Матчи</span>
+                </nav>
+                <h1 class="page-title">Календарь и результаты</h1>
+                <p class="page-subtitle">Расписание матчей и турнирная таблица</p>
+            </div>
+        </section>
+
+        <section class="section matches-section">
+            <div class="container">
+                <div class="matches-tabs">
+                    <button class="tab-btn active" data-tab="upcoming">Предстоящие</button>
+                    <button class="tab-btn" data-tab="past">Прошедшие</button>
+                </div>
+
+                <div id="upcomingMatches" class="matches-list" style="display: block;">
+                    <div class="match-card">
+                        <div class="match-info">
+                            <div class="match-date">15 мая 2026 • 16:00</div>
+                            <div class="match-teams">ФК БАРС — Дордой (Бишкек)</div>
+                            <div class="match-location">📍 Ынтымак Арена, Каракол</div>
+                        </div>
+                        <div class="match-result upcoming"> Матч не начался</div>
+                    </div>
+                    <div class="match-card">
+                        <div class="match-info">
+                            <div class="match-date">22 мая 2026 • 17:00</div>
+                            <div class="match-teams">Абдыш-Ата (Кант) — ФК БАРС</div>
+                            <div class="match-location">📍 Стадион Кант, Кант</div>
+                        </div>
+                        <div class="match-result upcoming"> Матч не начался</div>
+                    </div>
+                    <div class="match-card">
+                        <div class="match-info">
+                            <div class="match-date">29 мая 2026 • 16:00</div>
+                            <div class="match-teams">ФК БАРС — Алай (Ош)</div>
+                            <div class="match-location">📍 Ынтымак Арена, Каракол</div>
+                        </div>
+                        <div class="match-result upcoming"> Матч не начался</div>
+                    </div>
+                </div>
+
+                <div id="pastMatches" class="matches-list" style="display: none;">
+                    <div class="match-card">
+                        <div class="match-info">
+                            <div class="match-date">15 марта 2026 • 16:00</div>
+                            <div class="match-teams">ФК БАРС — Динамо (Бишкек)</div>
+                            <div class="match-location">📍 Ынтымак Арена, Каракол</div>
+                        </div>
+                        <div class="match-result">2:1</div>
+                    </div>
+                    <div class="match-card">
+                        <div class="match-info">
+                            <div class="match-date">22 марта 2026 • 15:00</div>
+                            <div class="match-teams">Нефтчи (Кочкор-Ата) — ФК БАРС</div>
+                            <div class="match-location">📍 Центральный стадион, Кочкор-Ата</div>
+                        </div>
+                        <div class="match-result">0:3</div>
+                    </div>
+                    <div class="match-card">
+                        <div class="match-info">
+                            <div class="match-date">5 апреля 2026 • 16:00</div>
+                            <div class="match-teams">ФК БАРС — Алга (Бишкек)</div>
+                            <div class="match-location">📍 Ынтымак Арена, Каракол</div>
+                        </div>
+                        <div class="match-result">1:0</div>
+                    </div>
+                    <div class="match-card">
+                        <div class="match-info">
+                            <div class="match-date">12 апреля 2026 • 17:00</div>
+                            <div class="match-teams">Дордой (Бишкек) — ФК БАРС</div>
+                            <div class="match-location">📍 Стадион Дордой, Бишкек</div>
+                        </div>
+                        <div class="match-result">1:1</div>
+                    </div>
+                </div>
+
+                <div class="section-header" style="margin-top: 80px;">
+                    <h2 class="section-title">Турнирная таблица</h2>
+                    <p class="section-subtitle">Чемпионат Кыргызстана 2026</p>
+                </div>
+                <div class="standings-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th><th>Команда</th><th>И</th><th>В</th><th>Н</th><th>П</th><th>Голы</th><th>О</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="highlight"><td>1</td><td><strong>ФК БАРС</strong></td><td>6</td><td>5</td><td>1</td><td>0</td><td>14:3</td><td><strong>16</strong></td></tr>
+                            <tr><td>2</td><td>Дордой</td><td>6</td><td>4</td><td>2</td><td>0</td><td>12:4</td><td>14</td></tr>
+                            <tr><td>3</td><td>Абдыш-Ата</td><td>6</td><td>3</td><td>2</td><td>1</td><td>9:5</td><td>11</td></tr>
+                            <tr><td>4</td><td>Алга</td><td>6</td><td>3</td><td>1</td><td>2</td><td>8:7</td><td>10</td></tr>
+                            <tr><td>5</td><td>Алай</td><td>6</td><td>2</td><td>2</td><td>2</td><td>7:8</td><td>8</td></tr>
+                            <tr><td>6</td><td>Нефтчи</td><td>6</td><td>1</td><td>1</td><td>4</td><td>4:12</td><td>4</td></tr>
+                            <tr><td>7</td><td>Динамо</td><td>6</td><td>0</td><td>2</td><td>4</td><td>3:11</td><td>2</td></tr>
+                            <tr><td>8</td><td>Кара-Балта</td><td>6</td><td>0</td><td>1</td><td>5</td><td>2:10</td><td>1</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html" class="logo">
+                        <span class="logo-icon"><i class="fas fa-futbol"></i></span>
+                        <span class="logo-text">ФК БАРС</span>
+                    </a>
+                    <p>Футбольный клуб «Барс» – честь, борьба, победа.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/barsissykkul" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://t.me/barsissykkul" target="_blank"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-contact">
+                    <h3>Контакты</h3>
+                    <p>г. Каракол, ул. Нагимы Айтматовой<br>Стадион «Ынтымак Арена»</p>
+                    <p><i class="fas fa-phone"></i> +996 (3922) 5-11-22</p>
+                    <p><i class="fas fa-envelope"></i> info@fcbars.kg</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Футбольный клуб «Барс» (Каракол). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Переключение между вкладками
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const tab = btn.dataset.tab;
+                document.getElementById('upcomingMatches').style.display = tab === 'upcoming' ? 'block' : 'none';
+                document.getElementById('pastMatches').style.display = tab === 'past' ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

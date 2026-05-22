@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ФК Барс – официальный сайт футбольного клуба (Каракол)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        /* Стили для кнопки админ-панели (СИНЯЯ, ВВЕРХУ СПРАВА) */
+        .admin-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10000;
+            box-shadow: 0 2px 10px rgba(0,123,255,0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .admin-button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,123,255,0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Кнопка Админ-панели -->
+    <a href="admin/login.html" class="admin-button" target="_blank">
+    <i class="fas fa-sign-in-alt"></i> Войти
+    </a>
+
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon"><i class="fas fa-futbol"></i></span>
+                    <span class="logo-text">ФК БАРС</span>
+                    <span class="logo-subtitle">футбольный клуб • каракол</span>
+                </a>
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <ul class="nav-menu" id="navMenu">
+                      <li><a href="index.html" class="nav-link">Главная</a></li>
+                      <li><a href="club.html" class="nav-link">О клубе</a></li>
+                      <li><a href="team.html" class="nav-link">Команда</a></li>
+                      <li><a href="matches.html" class="nav-link">Матчи</a></li>
+                      <li><a href="news.html" class="nav-link">Новости</a></li>
+                      <li><a href="contact.html" class="nav-link">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Футбольный клуб «Барс»</h1>
+                    <p class="hero-subtitle">Каракол – сила, характер, победы!</p>
+                </div>
+            </div>
+            <a href="#welcome" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <section class="section welcome-section" id="welcome">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Добро пожаловать</h2>
+                    <p class="section-subtitle">ФК «Барс» – гордость Каракола</p>
+                </div>
+                <div class="welcome-content">
+                    <div class="welcome-text">
+                        <p>Футбольный клуб «Барс» основан в 1985 году. За более чем 40 лет истории команда стала настоящим символом спортивного духа и воли к победе. Мы воспитали не одно поколение талантливых футболистов, которые защищали цвета клуба на региональных и республиканских турнирах.</p>
+                        <p>Сегодня «Барс» – это современный клуб с профессиональной академией, опытным тренерским штабом и преданными болельщиками. Мы стремимся к новым вершинам и всегда рады видеть вас на трибунах!</p>
+                        <div class="welcome-buttons">
+                            <a href="club.html" class="btn btn-primary">Подробнее о клубе</a>
+                            <a href="team.html" class="btn btn-outline">Состав команды</a>
+                        </div>
+                    </div>
+                    <div class="welcome-image">
+                        <div class="image-frame">
+                            <div class="club-image" id="clubImage"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section quick-links-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Наши разделы</h2>
+                    <p class="section-subtitle">Всё о жизни клуба</p>
+                </div>
+                <div class="quick-links-grid">
+                    <a href="team.html" class="quick-link-card">
+                        <div class="quick-link-icon"><i class="fas fa-users"></i></div>
+                        <h3>Команда</h3>
+                        <p>Игроки, тренерский штаб, номера и амплуа</p>
+                        <span class="link-arrow">Подробнее <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                    <a href="matches.html" class="quick-link-card">
+                        <div class="quick-link-icon"><i class="fas fa-calendar-alt"></i></div>
+                        <h3>Матчи</h3>
+                        <p>Расписание, результаты, турнирная таблица</p>
+                        <span class="link-arrow">Подробнее <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                    <a href="contact.html" class="quick-link-card">
+                        <div class="quick-link-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <h3>Контакты</h3>
+                        <p>Как добраться до стадиона, связаться с клубом</p>
+                        <span class="link-arrow">Подробнее <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section benefits-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Наши достижения</h2>
+                    <p class="section-subtitle">Почему «Барс» – это сила</p>
+                </div>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-trophy"></i></div>
+                        <h3>5 Чемпионств</h3>
+                        <p>Победители чемпионата Иссык-Кульской области 2015, 2018, 2020, 2022, 2024</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-futbol"></i></div>
+                        <h3>Собственная академия</h3>
+                        <p>Более 150 юных воспитанников тренируются под руководством профессионалов</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-users"></i></div>
+                        <h3>Преданные болельщики</h3>
+                        <p>Каждый матч собирает полные трибуны стадиона «Ынтымак Арена»</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>Современная инфраструктура</h3>
+                        <p>Обновлённое поле, раздевалки, тренажёрный зал, медицинский центр</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Ближайший матч</h2>
+                    <p>«Барс» – «Дордой» (Бишкек) • 15 мая 2026 • 16:00</p>
+                    <div class="cta-buttons">
+                        <a href="matches.html" class="btn btn-outline" style="border-color: white; color: white;">Календарь игр</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html" class="logo">
+                        <span class="logo-icon"><i class="fas fa-futbol"></i></span>
+                        <span class="logo-text">ФК БАРС</span>
+                    </a>
+                    <p>Футбольный клуб «Барс» – честь, борьба, победа.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/barsissykkul" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://t.me/barsissykkul" target="_blank"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-contact">
+                    <h3>Контакты</h3>
+                    <p>г. Каракол, ул. Нагимы Айтматовой<br>Стадион «Ынтымак Арена»</p>
+                    <p><i class="fas fa-phone"></i> +996 (3922) 5-11-22</p>
+                    <p><i class="fas fa-envelope"></i> info@fcbars.kg</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Футбольный клуб «Барс» (Каракол). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

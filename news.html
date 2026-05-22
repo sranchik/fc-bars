@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новости – ФК Барс (Каракол)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .admin-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        .news-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .news-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .news-content {
+            padding: 25px;
+        }
+        .news-date {
+            color: #1e3a5f;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .news-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+        .news-text {
+            color: #64748b;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: #64748b;
+        }
+        .error-message {
+            text-align: center;
+            padding: 50px;
+            color: #dc3545;
+            font-size: 1.1rem;
+        }
+        
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            transition: 0.2s;
+            z-index: 1;
+        }
+        .modal-close:hover {
+            color: #333;
+        }
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        .modal-body {
+            padding: 30px;
+        }
+        .modal-date {
+            color: #1e3a5f;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+        .modal-text {
+            color: #334155;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        .read-more {
+            display: inline-block;
+            margin-top: 15px;
+            color: #1e3a5f;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <a href="admin/login.html" class="admin-button" target="_blank">
+        <i class="fas fa-sign-in-alt"></i> Войти
+    </a>
+
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon"><i class="fas fa-futbol"></i></span>
+                    <span class="logo-text">ФК БАРС</span>
+                    <span class="logo-subtitle">футбольный клуб • каракол</span>
+                </a>
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Главная</a></li>
+                    <li><a href="club.html" class="nav-link">О клубе</a></li>
+                    <li><a href="team.html" class="nav-link">Команда</a></li>
+                    <li><a href="matches.html" class="nav-link">Матчи</a></li>
+                    <li><a href="news.html" class="nav-link active">Новости</a></li>
+                    <li><a href="contact.html" class="nav-link">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="breadcrumb-section">
+            <div class="container">
+                <nav class="breadcrumb">
+                    <a href="index.html">Главная</a>
+                    <span><i class="fas fa-chevron-right"></i></span>
+                    <span class="current">Новости</span>
+                </nav>
+                <h1 class="page-title">Новости клуба</h1>
+                <p class="page-subtitle">Свежие новости и анонсы ФК «Барс»</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div id="newsContainer" class="news-grid">
+                    <div class="loading">Загрузка новостей...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальное окно -->
+    <div id="newsModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" class="modal-image" style="display: none;">
+            <div class="modal-body">
+                <div id="modalDate" class="modal-date"></div>
+                <h2 id="modalTitle" class="modal-title"></h2>
+                <div id="modalText" class="modal-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html" class="logo">
+                        <span class="logo-icon"><i class="fas fa-futbol"></i></span>
+                        <span class="logo-text">ФК БАРС</span>
+                    </a>
+                    <p>Футбольный клуб «Барс» – честь, борьба, победа.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/barsissykkul" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://t.me/barsissykkul" target="_blank"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-contact">
+                    <h3>Контакты</h3>
+                    <p>г. Каракол, ул. Нагимы Айтматовой<br>Стадион «Ынтымак Арена»</p>
+                    <p><i class="fas fa-phone"></i> +996 (3922) 5-11-22</p>
+                    <p><i class="fas fa-envelope"></i> info@fcbars.kg</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Футбольный клуб «Барс» (Каракол). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'https://8888888.pythonanywhere.com/api';
+        let currentNewsData = [];
+
+        async function loadNews() {
+            const container = document.getElementById('newsContainer');
+            try {
+                const response = await fetch(`${API_URL}/news`);
+                if (!response.ok) throw new Error('Сервер не отвечает');
+                const news = await response.json();
+                currentNewsData = news;
+                
+                if (news.length === 0) {
+                    container.innerHTML = '<div class="loading">📭 Новостей пока нет. Зайдите в админ-панель, чтобы добавить.</div>';
+                    return;
+                }
+                
+                container.innerHTML = news.map((item, index) => `
+                    <div class="news-card" onclick="openNewsModal(${index})">
+                        ${item.image_url ? `<img src="${item.image_url}" class="news-image" onerror="this.style.display='none'" alt="${escapeHtml(item.title)}">` : ''}
+                        <div class="news-content">
+                            <div class="news-date">📅 ${new Date(item.date).toLocaleDateString('ru-RU')}</div>
+                            <h3 class="news-title">${escapeHtml(item.title)}</h3>
+                            <p class="news-text">${escapeHtml(item.content.substring(0, 200))}${item.content.length > 200 ? '...' : ''}</p>
+                            <span class="read-more">Читать полностью →</span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Ошибка загрузки новостей:', error);
+                container.innerHTML = '<div class="error-message">❌ Ошибка подключения к серверу. Попробуйте позже.</div>';
+            }
+        }
+        
+        function openNewsModal(index) {
+            const news = currentNewsData[index];
+            if (!news) return;
+            
+            const modal = document.getElementById('newsModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalDate = document.getElementById('modalDate');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalText = document.getElementById('modalText');
+            
+            if (news.image_url) {
+                modalImage.src = news.image_url;
+                modalImage.style.display = 'block';
+            } else {
+                modalImage.style.display = 'none';
+            }
+            
+            modalDate.innerHTML = `📅 ${new Date(news.date).toLocaleDateString('ru-RU')}`;
+            modalTitle.innerHTML = escapeHtml(news.title);
+            modalText.innerHTML = escapeHtml(news.content).replace(/\n/g, '<br>');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('newsModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Закрытие по Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // Закрытие по клику вне контента
+        document.getElementById('newsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // Защита от XSS
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        loadNews();
+    </script>
+</body>
+</html>
